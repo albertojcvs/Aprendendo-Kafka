@@ -6,4 +6,11 @@ services:
       - .:/usr/app
     command: yarn start
     ports:
-      - 3333:3333
+      - 3335:3335
+    networks:
+      - net
+
+
+networks:
+  net:
+    external: true

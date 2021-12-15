@@ -8,7 +8,7 @@ COPY yarn.lock .
 
 RUN yarn
 
-EXPOSE 3334
+EXPOSE 3335
 
 COPY . . 
 
