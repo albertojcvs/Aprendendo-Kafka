@@ -8,6 +8,11 @@ export class PrismaUserRepository implements IUsersRepository {
   }
 
   async destroy(id: number) {
-    await prisma.user.deleteMany({});
+    await prisma.user.deleteMany({where:{id}});
+  }
+
+  async find(id:number){
+   const user =  await prisma.user.findFirst({where:{id},rejectOnNotFound:true})
+    return user;
   }
 }
