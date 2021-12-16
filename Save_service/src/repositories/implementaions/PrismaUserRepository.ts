@@ -7,7 +7,7 @@ export class PrismaUserRepository implements IUsersRepository {
     await prisma.user.create({ data: user });
   }
 
-  async destroy(email: string) {
-    await prisma.user.delete({ where: { email } });
+  async destroy(id: number) {
+    await prisma.user.deleteMany({});
   }
 }
