@@ -1,5 +1,6 @@
 import { Kafka, Consumer as KafkaConsumer } from "kafkajs";
 import { PrismaUserRepository } from "../repositories/implementaions/PrismaUserRepository";
+import { Producer } from "./Producer";
 
 const userRepository = new PrismaUserRepository();
 
@@ -22,6 +23,7 @@ export class Consumer {
       fromBeginning: false,
     });
 
+    const producer = new Producer();
     await this.consumer.run({
       eachMessage: async ({ topic, message }) => {
         const data = message.value?.toString();
@@ -30,12 +32,21 @@ export class Consumer {
             if (data) {
               const user = JSON.parse(data);
               await userRepository.store(user);
+              await producer.produce({
+                topic: "send_email_new_user",
+                messages: [{ value: JSON.stringify(user)}],
+              });
               break;
             }
           case "delete_user":
             if (data) {
+              const user = await userRepository.find(Number(data));
               await userRepository.destroy(Number(data));
-              break;
+              await producer.produce({
+                topic: "send_email_delete_user",
+                messages: [{ value: JSON.stringify(user) }],
+              });
+              break;  
             }
           default:
             console.log("ERROR");
