@@ -1,4 +1,4 @@
-import express, { request } from 'express'
+import express from 'express'
 import { createUserController } from './useCases/CreateUser';
 import { deleteUserController } from './useCases/DeleteUser';
 
@@ -12,3 +12,6 @@ routes.post('/users',(request,response) => {
 routes.delete('/users/:id',(request,response) => {
     return deleteUserController.handle(request,response)
 } )
+
+
+export {routes};
